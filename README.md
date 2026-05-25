@@ -50,17 +50,22 @@ Next.js App Router, React 18, TypeScript 환경에서 모듈성과 비동기 데
 
 ### A. 컴포넌트 구조도
 
-```
-[app/page.tsx (Main Layout)]
-        │
-        ▼
-[context/DashboardContext.tsx (DashboardProvider)] ──┐ (전역 상태 및 API 핸들러 제공)
-        │                                            │
-        ├──────────────────────┬─────────────────────┼─────────────────────┐
-        ▼                      ▼                     ▼                     ▼
-[components/Sidebar]  [components/EmissionsChart]  [components/ScopeBreakdown]  [components/PcfSimulator]
-  - 기업 검색 및 필터    - 월별 배출량 차트    - Scope 1/2/3 카드 뷰  - 실시간 PCF 입력 폼
-  - 기업 전환 제어      - 배출원 툴팁 제공      - 사업장별 배출량 표   - LCA 로드맵 시각화
+```mermaid
+graph TD
+    Page[app/page.tsx <br> Main Layout] --> Provider[context/DashboardContext.tsx <br> DashboardProvider]
+
+    Provider -.-> |전역 상태 및 API 제공| Sidebar[components/Sidebar <br> - 기업 검색/필터 <br> - 기업 전환 제어]
+    Provider -.-> |전역 상태 및 API 제공| Chart[components/EmissionsChart <br> - 월별 배출량 차트 <br> - 배출원 상세 툴팁]
+    Provider -.-> |전역 상태 및 API 제공| Scope[components/ScopeBreakdown <br> - Scope 1/2/3 카드 뷰 <br> - 사업장별 배출량 표]
+    Provider -.-> |전역 상태 및 API 제공| PCF[components/PcfSimulator <br> - 실시간 PCF 입력 폼 <br> - LCA 로드맵 시각화]
+
+    style Page fill:#2d6574,stroke:#333,stroke-width:2px,color:#fff
+    style Provider fill:#c6803a,stroke:#333,stroke-width:2px,color:#fff
+    style Sidebar fill:#f6f8f7,stroke:#2d6574,stroke-width:1px
+    style Chart fill:#f6f8f7,stroke:#2d6574,stroke-width:1px
+    style Scope fill:#f6f8f7,stroke:#2d6574,stroke-width:1px
+    style PCF fill:#f6f8f7,stroke:#2d6574,stroke-width:1px
+
 ```
 
 ### B. 비동기 통신 및 낙관적 업데이트 (Optimistic UI & Rollback)
